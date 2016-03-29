@@ -2,4 +2,4 @@ redis-server runs on master who holds a queue and a set.
 
 For one client, the crawling of gs.dlut.edu.cn costs 1261s. 7184 pages are found. It is fastter than ones which I have written in ScaleOfWebsites
 
-The distribution uses 5 crawlers to crawl "gs.dlut.edu.cn".360s is faster than single node whose bfs is 1200s and dfs is 3600s. But ......
+The distribution uses 5 crawlers to crawl "gs.dlut.edu.cn".360s is faster than single node whose bfs is 1200s and dfs is 3600s. But 
