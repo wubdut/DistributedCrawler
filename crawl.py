@@ -18,7 +18,7 @@ def detect(base, url):
     url1 = urljoin(base, url)
     arr = urlparse(url1)
     path = normpath(arr[2])
-    return urlunparse((arr.scheme, arr.netloc, path, arr.params, arr.query, arr.fragment))
+    return str(urlunparse((arr.scheme, arr.netloc, path, arr.params, arr.query, arr.fragment)))
 
 def parseLink(node):
     try:
