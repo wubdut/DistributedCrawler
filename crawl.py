@@ -37,24 +37,40 @@ def parseLink(node):
 def find(netSite=''):
     global zhuji, rserver
     rserver.rpush('crawlQueue', netSite)
-    while rserver.llen('crawlQueue'):
+    while True:
+        while rserver.llen('crawlQueue') == 0:                                           # waiting zone
+            print("waiting")
+            if rserver.get('flag') == '0':
+                return
+
+        rserver.incr('flag')                                                             # enter the working zone
         listURL = []
         node = rserver.lpop('crawlQueue')
-        if node.find(zhuji) == -1:
+        if node is None:
+            rserver.decr('flag')
             continue
-        if rserver.sismember('setVisited', node):
+        if node.find(zhuji) == -1:
+            rserver.decr('flag')
+            continue
+        if rserver.sismember('setVisited', node):        # have to check when arrive, or duplicates of "rpush" that wait to go into queue exist.
+            rserver.decr('flag')
             continue
         else:
             listURL = parseLink(node)
             if listURL == 'no':
+                rserver.decr('flag')
                 continue
             rserver.sadd('setVisited', node)
         # print ("I am here: " + node)
+        pipe = rserver.pipeline()
         for item in listURL:
-            rserver.rpush('crawlQueue', detect(node, item))
+            pipe.rpush('crawlQueue', detect(node, item))
+        pipe.execute()
+        rserver.decr('flag')                                                           # leave working zone
     return
 
-rserver.delete('setVisited')
+rserver.delete('setVisited')                         # just for server
+rserver.delete('flag')                               # just for server
 find('http://gs.dlut.edu.cn')
 print ('Page: ' + str(rserver.scard('setVisited')))
 print('Time: ' + str(rserver.time()[0] - time1) + ' s')
