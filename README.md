@@ -33,6 +33,8 @@ server和clients对于任务已完成的同步:
          1) 假设有两台client, client1检测url_queue为0, 进入等待区; client2处于任务区解析URL. 当client2提交任务后, server上
          可能先执行检测is_running为0, redis还没有将client2的任务加入url_queue, client1退出了(ps: 知道进程通信有什么然并卵, 
          这么一个简单的同步都实践不了. 骚年还要努力啊)
+            解决方案: 两个个部分要封装成事务: 1)等待区中if rserver.llen('crawlQueue') == 0 and rserver.get('flag') == '0':
+                                              2)工作区提交和退出multi(pipe.execute(); rserver.decr('flag'))
                
          
          
@@ -47,7 +49,7 @@ server和clients对于任务已完成的同步:
 
 2. redis分布式 和 bfs单机
 
-3. redis管道事物 和 一个个放入队列
+3. redis管道pipe 和 一个个放入队列
 
 4. 查重后放入队列 和 全放入队列(注:放入的也要通信查)
 
