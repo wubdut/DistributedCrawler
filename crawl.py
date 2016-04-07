@@ -66,7 +66,9 @@ def find(netSite=''):
         # print ("I am here: " + node)
         pipe = rserver.pipeline()
         for item in listURL:
-            pipe.rpush('crawlQueue', detect(node, item))
+            tmp = detect(node, item)
+	    if not rserver.sismember('setVisited', tmp):
+		pipe.rpush('crawlQueue', tmp)
         pipe.execute()
         rserver.decr('flag')                                                           # leave working zone
     return
