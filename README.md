@@ -29,7 +29,9 @@ server和clients对于任务已完成的同步:
                
          但是还是有问题的: 主要可能出现在通信延时和redis执行顺序上.
          
-         1) 假设有两台client, client1检测url_queue为0, 进入等待区; client2处于任务区解析URL. 当client2提交任务后, server上可能先执行检测is_running为0, redis还没有将client2的任务加入url_queue, client1退出了(ps: 知道进程通信有什么然并卵, 这么一个简单的同步都实践不了. 骚年还要努力啊)
+         1) 假设有两台client, client1检测url_queue为0, 进入等待区; client2处于任务区解析URL. 当client2提交任务后, server上
+         可能先执行检测is_running为0, redis还没有将client2的任务加入url_queue, client1退出了(ps: 知道进程通信有什么然并卵, 
+         这么一个简单的同步都实践不了. 骚年还要努力啊)
                
          
          
@@ -38,7 +40,7 @@ server和clients对于任务已完成的同步:
 
 一. 分布式与通信:
 
-一次自环通信相当于一次list的sadd操作。所以要尽量减少频繁的通信，将多次通信任务打包成单次通信。
+一次自环通信相当于一次list的push操作。所以要尽量减少频繁的通信，将多次通信任务打包成单次通信。
 
 1. dfs 和 bfs
 
