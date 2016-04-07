@@ -1,6 +1,7 @@
 # coding: UTF-8
 import requests
 import redis
+import time
 from bs4 import BeautifulSoup
 from urlparse import urljoin
 from urlparse import urlparse
@@ -40,6 +41,7 @@ def find(netSite=''):
     while True:
         while rserver.llen('crawlQueue') == 0:                                           # waiting zone
             print("waiting")
+            time.sleep(3)
             if rserver.get('flag') == '0':
                 return
 
