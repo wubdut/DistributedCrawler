@@ -33,8 +33,10 @@ server和clients对于任务已完成的同步:
          1) 假设有两台client, client1检测url_queue为0, 进入等待区; client2处于任务区解析URL. 当client2提交任务后, server上
          可能先执行检测is_running为0, redis还没有将client2的任务加入url_queue, client1退出了(ps: 知道进程通信有什么然并卵, 
          这么一个简单的同步都实践不了. 骚年还要努力啊)
-            解决方案: 两个个部分要封装成事务: 1)等待区中if rserver.llen('crawlQueue') == 0 and rserver.get('flag') == '0':
-                                              2)工作区提交和退出multi(pipe.execute(); rserver.decr('flag'))
+            解决方案: 两个个部分要封装成事务: 
+                     1)等待区中if rserver.llen('crawlQueue') == 0 and rserver.get('flag') == '0':
+                     
+                     2)工作区提交和退出multi(pipe.execute(); rserver.decr('flag'))
                
          
          
@@ -63,6 +65,8 @@ server和clients对于任务已完成的同步:
 集群稳定性:
 
 一. 单点故障:
+
    (1) 由于client都可以访问信号量is_running. 如果某一client死机, 则没有将is_running减1. 就算任务完成, 其他client也会停留在等待区.
        方案: 定时检测是否死机, 不能简单你记录个数，要维持在工作区中client列表.
+       
    (2) 有记录工作区中每个client获取的任务, 如果死机, 将client清除, 并将其任务放回server队列.
