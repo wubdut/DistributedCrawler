@@ -46,7 +46,7 @@ def find():
             pipe.multi()
             pipe.llen('crawlQueue')
             pipe.get('flag')                                                     #这里要考虑原子性, 等待过程中其他client可能退出,但queue已不为0
-            out = pipe.excute()
+            out = pipe.execute()
             if out[0] == 0 and out[1] == '0':
                 return
 
