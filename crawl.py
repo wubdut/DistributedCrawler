@@ -15,6 +15,7 @@ rserver = redis.Redis('192.168.2.108')
 time1 = rserver.time()[0]
 zhuji = 'gs.dlut.edu.cn'
 
+print ('come here')
 def detect(base, url):
     url1 = urljoin(base, url)
     arr = urlparse(url1)
@@ -35,14 +36,18 @@ def parseLink(node):
         myset.add(item.get('href'))
     return list(myset)
 
-def find(netSite=''):
+def find():
     global zhuji, rserver
-    rserver.rpush('crawlQueue', netSite)
     while True:
         while rserver.llen('crawlQueue') == 0:                                           # waiting zone
             print("waiting")
             time.sleep(3)
-            if rserver.get('flag') == '0':
+            pipe = rserver.pipeline()
+            pipe.multi()
+            pipe.llen('crawlQueue')
+            pipe.get('flag')                                                     #这里要考虑原子性, 等待过程中其他client可能退出,但queue已不为0
+            out = pipe.excute()
+            if out[0] == 0 and out[1] == '0':
                 return
 
         rserver.incr('flag')                                                             # enter the working zone
@@ -65,17 +70,14 @@ def find(netSite=''):
             rserver.sadd('setVisited', node)
         # print ("I am here: " + node)
         pipe = rserver.pipeline()
+        pipe.multi()
         for item in listURL:
             tmp = detect(node, item)
-	    if not rserver.sismember('setVisited', tmp):
-		pipe.rpush('crawlQueue', tmp)
+            if not rserver.sismember('setVisited', tmp):
+                pipe.rpush('crawlQueue', tmp)                                         #此处要有隔离
+        pipe.decr('flag')                                                             # leave working zone
         pipe.execute()
-        rserver.decr('flag')                                                           # leave working zone
     return
 
-rserver.delete('setVisited')                         # just for server
-rserver.delete('flag')                               # just for server
-find('http://gs.dlut.edu.cn')
-print ('Page: ' + str(rserver.scard('setVisited')))
-print('Time: ' + str(rserver.time()[0] - time1) + ' s')
+find()
 print ("node13 finish jobs (^_^)")
