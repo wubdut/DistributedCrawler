@@ -66,7 +66,7 @@ server和clients对于任务已完成的同步:
 
 一. 单点故障:
 
-   (1) 由于client都可以访问信号量is_running. 如果某一client死机, 则没有将is_running减1. 就算任务完成, 其他client也会停留在等待区.
+   1. 由于client都可以访问信号量is_running. 如果某一client死机, 则没有将is_running减1. 就算任务完成, 其他client也会停留在等待区.
        方案: 定时检测是否死机, 不能简单你记录个数，要维持在工作区中client列表.
        
-   (2) 有记录工作区中每个client获取的任务, 如果死机, 将client清除, 并将其任务放回server队列.
+   2. 有记录工作区中每个client获取的任务, 如果死机, 将client清除, 并将其任务放回server队列.
