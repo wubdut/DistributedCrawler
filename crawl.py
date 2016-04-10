@@ -51,9 +51,12 @@ def find():
             if out[0] == 0 and out[1] == '0':
                 return
 
-        rserver.incr('flag')                                                             # enter the working zone
         listURL = []
-        node = rserver.lpop('crawlQueue')
+        pipe = rserver.pipeline()
+        pipe.multi()
+        pipe.incr('flag')                                                             # enter the working zone
+        pipe.lpop('crawlQueue')
+        node = pipe.execute()[1]
         if node is None:
             rserver.decr('flag')
             continue
@@ -81,5 +84,5 @@ def find():
     return
 
 find()
-os.system("echo '666666' | ssh wubin@192.168.2.108 '/home/wubin/workspace/py/DistributedCrawler/finish.py'")
+os.system("echo '666666' | ssh wubin@192.168.2.108 'python /home/wubin/workspace/py/DistributedCrawler/finish.py'")
 print ("node13 finish jobs (^_^)")
