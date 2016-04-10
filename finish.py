@@ -7,7 +7,7 @@ reload(sys)
 sys.setdefaultencoding( "utf-8" )
 
 rserver = redis.Redis('localhost')
-file = open('./logs/server', 'w')
+file = open('/home/wubin/workspace/py/DistributedCrawler/logs/server', 'w')
 
 t1 = int(rserver.get('time1'))
 t2 = int(time.time())
