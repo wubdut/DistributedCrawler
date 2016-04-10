@@ -15,7 +15,7 @@ sys.setdefaultencoding( "utf-8" )
 rserver = redis.Redis('192.168.2.108')
 time1 = rserver.time()[0]
 zhuji = 'gs.dlut.edu.cn'
-file = open('./logs/client', 'w')
+file = open('/home/hadoop/workspace/DistributedCrawler/logs/client', 'w')
 
 file.write('come here \n')
 def detect(base, url):
