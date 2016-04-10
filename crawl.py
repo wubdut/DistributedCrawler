@@ -2,6 +2,7 @@
 import requests
 import redis
 import time
+import os
 from bs4 import BeautifulSoup
 from urlparse import urljoin
 from urlparse import urlparse
@@ -80,4 +81,5 @@ def find():
     return
 
 find()
+os.system("echo '666666' | ssh wubin@192.168.2.108 '/home/wubin/workspace/py/DistributedCrawler/finish.py'")
 print ("node13 finish jobs (^_^)")
