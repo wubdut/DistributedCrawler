@@ -17,7 +17,7 @@ time1 = rserver.time()[0]
 zhuji = 'gs.dlut.edu.cn'
 file = open('./logs/client', 'w')
 
-file.write('come here')
+file.write('come here \n')
 def detect(base, url):
     url1 = urljoin(base, url)
     arr = urlparse(url1)
@@ -31,7 +31,7 @@ def parseLink(node):
         if ret.status_code >= 400: #这里不一定只是200,需要了解状态码后确定.以及ip限制的代理问题
             return []
     except Exception as e:
-        file.write("客户端或服务器错误:" + node)
+        file.write("客户端或服务器错误:" + node + "\n")
         return ['no']
     myset = set()
     soup = BeautifulSoup(ret.text, "html.parser")
@@ -43,7 +43,7 @@ def find():
     global zhuji, rserver
     while True:
         while rserver.llen('crawlQueue') == 0:                                           # waiting zone
-            print("waiting")
+            file.write("waiting\n")
             time.sleep(3)
             pipe = rserver.pipeline()
             pipe.multi()

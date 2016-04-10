@@ -12,7 +12,7 @@ file = open('./logs/server', 'w')
 t1 = int(rserver.get('time1'))
 t2 = int(time.time())
 
-file.write("page: " + str(rserver.scard('setVisited')))
-file.write("time: " + str(t2-t1))
+file.write("page: " + str(rserver.scard('setVisited')) + "\n")
+file.write("time: " + str(t2-t1) + " s\n")
 
 file.close()
