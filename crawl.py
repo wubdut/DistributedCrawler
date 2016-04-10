@@ -86,8 +86,8 @@ def find():
     return
 
 find()
+file.write ("node13 finish jobs (^_^)\n")
 file.close()
 if rserver.get('returnServer') == '0':
     os.system("ssh wubin@192.168.2.108 'python /home/wubin/workspace/py/DistributedCrawler/finish.py'")
     rserver.incr('returnServer')
-print ("node13 finish jobs (^_^)")
