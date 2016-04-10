@@ -11,6 +11,7 @@ rserver.delete('setVisited')                         # just for server
 rserver.delete('crawlQueue')                         # just for server
 rserver.delete('flag')                               # just for server
 rserver.set('time1', int(time.time()))
+rserver.set('returnServer', '0')
 
 netSite = 'http://gs.dlut.edu.cn'
 rserver.rpush('crawlQueue', netSite)

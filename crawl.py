@@ -15,8 +15,9 @@ sys.setdefaultencoding( "utf-8" )
 rserver = redis.Redis('192.168.2.108')
 time1 = rserver.time()[0]
 zhuji = 'gs.dlut.edu.cn'
+file = open('./logs/client', 'w')
 
-print ('come here')
+file.write('come here')
 def detect(base, url):
     url1 = urljoin(base, url)
     arr = urlparse(url1)
@@ -24,12 +25,13 @@ def detect(base, url):
     return str(urlunparse((arr.scheme, arr.netloc, path, arr.params, arr.query, arr.fragment)))
 
 def parseLink(node):
+    global file
     try:
         ret = requests.get(node)
         if ret.status_code >= 400: #这里不一定只是200,需要了解状态码后确定.以及ip限制的代理问题
             return []
     except Exception as e:
-        print ("客户端或服务器错误:" + node)
+        file.write("客户端或服务器错误:" + node)
         return ['no']
     myset = set()
     soup = BeautifulSoup(ret.text, "html.parser")
@@ -84,5 +86,8 @@ def find():
     return
 
 find()
-os.system("echo '666666' | ssh wubin@192.168.2.108 'python /home/wubin/workspace/py/DistributedCrawler/finish.py'")
+file.close()
+if rserver.get('returnServer') == '0':
+    os.system("ssh wubin@192.168.2.108 'python /home/wubin/workspace/py/DistributedCrawler/finish.py'")
+    rserver.incr('returnServer')
 print ("node13 finish jobs (^_^)")
