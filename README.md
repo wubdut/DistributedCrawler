@@ -2,7 +2,9 @@
 A distributed crawler for web crawling
 
 使用说明:
+
 1. 开启redis后, 执行start.sh即可执行分布式爬虫.
+
 2. 本项目致力于基于redis的轻量级的易于扩展的分布式爬虫. redis为我们提供了极好的分布式通信与存储框架,对于已经对操作系统有很好理
    解的童鞋以及被hadoop等框架限制了自由的技术咔来说, 都是很好的学习和研究对象.
 
