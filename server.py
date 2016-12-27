@@ -13,7 +13,8 @@ rserver.delete('flag')                               # just for server
 rserver.set('time1', int(time.time()))
 rserver.set('returnServer', '0')
 
-netSite = 'http://gs.dlut.edu.cn'
+netSite = 'http://121.42.185.24:8080/'
+rserver.set('zhuji', '121.42.185.24:8080')
 rserver.rpush('crawlQueue', netSite)
 
 # while True:
