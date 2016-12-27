@@ -14,7 +14,7 @@ sys.setdefaultencoding( "utf-8" )
 
 rserver = redis.Redis('192.168.2.108')
 time1 = rserver.time()[0]
-zhuji = 'gs.dlut.edu.cn'
+zhuji = rserver.get('zhuji')
 file = open('/home/hadoop/workspace/DistributedCrawler/logs/client', 'w')
 
 file.write('come here \n')
@@ -34,7 +34,7 @@ def parseLink(node):
         file.write("客户端或服务器错误:" + node + "\n")
         return ['no']
     myset = set()
-    soup = BeautifulSoup(ret.text, "html.parser")
+    soup = BeautifulSoup(ret.text) #, "html.parser")
     for item in soup.find_all('a'):
         myset.add(item.get('href'))
     return list(myset)

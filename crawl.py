@@ -34,7 +34,7 @@ def parseLink(node):
         file.write("客户端或服务器错误:" + node + "\n")
         return ['no']
     myset = set()
-    soup = BeautifulSoup(ret.text, "html.parser")
+    soup = BeautifulSoup(ret.text) #, "html.parser")
     for item in soup.find_all('a'):
         myset.add(item.get('href'))
     return list(myset)
